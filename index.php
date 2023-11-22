@@ -72,8 +72,8 @@ $result = $query->fetchAll();
 <body>
 
     <div class="topnav">
-        <a class="active" href="#home">Home</a>
-        <a href="#contact">Contact</a>
+        <a class="active" href="index.php">Home</a>
+        <a href="contact.php">Add a Game</a>
     </div>
     <h1 class="title">Welcome to my games collection!</h1>
 
