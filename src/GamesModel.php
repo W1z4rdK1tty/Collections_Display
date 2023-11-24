@@ -1,7 +1,7 @@
 <?php
 
 class GamesModel 
-    {
+{
     public PDO $db;
 
     public function __construct(PDO $db)
@@ -11,13 +11,12 @@ class GamesModel
 
     public function getAllGames()
     {
-    $query = $this->db->prepare('SELECT * FROM `board_games`;');
+        $query = $this->db->prepare('SELECT * FROM `board_games`;');
 
-    $query->execute();
+        $query->execute();
 
-    $result = $query->fetchAll();
-    return $result;
-
+        $result = $query->fetchAll();
+        return $result;
     }
-    }
+}
 
