@@ -37,26 +37,28 @@ if (
         } else {
             $playerCountMax = ($_POST["playerCountMax"]);
         }
-        //check no error messages - all fields are complete: 
-        //if none then submit to database and move to homepage - still need to write code to send to db!
 
         if ($nameErr == "" && $priceErr == "" && $minCountErr == "" && $maxCountErr == "") {
             header('Location: index.php');
+
+            $db = new PDO('mysql:host=db; dbname=collections_display', 'root', 'password');
+
+            $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+            $query = $db->prepare("INSERT INTO board_games (`name`, `rrp`, `min_player_count`, `max_player_count`, `image`, `types`) 
+                VALUES ('$name', '$price', '$playerCountMin', '$playerCountMax', '$image', '$gameType')");
+
+            $query->execute();
         }
 
-        $db = new PDO('mysql:host=db; dbname=collections_display', 'root', 'password');
-
-        $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-
-        $query = $db->prepare("INSERT INTO board_games (`name`, `rrp`, `min_player_count`, `max_player_count`, `image`, `type`) 
-            VALUES ('$name', '$price', '$playerCountMin', '$playerCountMax', '$image', '$gameType')");
-
-        $query->execute();
+        // $query->bindParam(':name', $name); 
+        // $query->bindParam(':rrp', $price);
+        // $query->bindParam(':min_player_count', $playerCountMin); 
+        // $query->bindParam(':max_player_count', $playerCountMax);
+        // $query->bindParam(':image', $image); 
+        // $query->bindParam(':types', $gameType);
     }
 }
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -66,51 +68,11 @@ if (
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact</title>
-    <style>
-        body {
-            margin: 0;
-            background-color: linen;
-            font-family: 'Mukta', sans-serif;
-        }
 
-        .topnav {
-            background-color: #333;
-            overflow: hidden;
-        }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        .topnav a {
-            float: left;
-            color: #f2f2f2;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-            font-size: 30px;
-        }
-
-        .topnav a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
-        .topnav a.active {
-            background-color: purple;
-            color: white;
-        }
-
-        .title {
-            text-align: center;
-            font-size: 40px;
-        }
-
-        .formToAdd {
-            display: grid;
-        }
-
-        .submitBtn {
-            max-width: 300px;
-
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
@@ -122,34 +84,30 @@ if (
 
     <form method="post" class="formToAdd">
         <label for="name">Name of Game *</label>
-        <input id="name" name="name" type="text" value="<?php echo $name; ?>" />
+        <input id="name" name="name" type="text" maxlength="100" value="<?php echo $name; ?>" />
         <span class="error"><?php echo $nameErr; ?></span>
-        <br><br>
 
         <label for="price">RRP £ *</label>
         <input id="price" name="price" type="number" min="0.00" max="1000.00" step="0.01" value="<?php echo $price; ?>" />
         <span class="error"><?php echo $priceErr; ?></span>
-        <br><br>
 
         <label for="playerCountMin">Minimum no. of Players *</label>
         <input id="playerCountMin" name="playerCountMin" type="number" min="1" max="100" value="<?php echo $playerCountMin; ?>" />
         <span class="error"><?php echo $minCountErr; ?></span>
-        <br><br>
 
         <label for="playerCountMax">Maximum no. of Players *</label>
         <input id="playerCountMax" name="playerCountMax" type="number" min="1" max="100" value="<?php echo $playerCountMax; ?>" />
         <span class="error"><?php echo $maxCountErr; ?></span>
-        <br><br>
 
-        <label for="image">Image url</label>
-        <input id="image" name="image" type="url" value="<?php echo $image; ?>" />
+        <label for="image">Image URL</label>
+        <input id="image" name="image" type="url" placeholder="https://www.example.com" maxlength="500" value="<?php echo $image; ?>" />
 
         <label for="gameType">Type of Game</label>
-        <input id="gameType" name="gameType" type="text" value="<?php echo $gameType; ?>" />
-        <br><br>
-
+        <input id="gameType" name="gameType" type="text" maxlength="100" placeholder="Strategy, Family, Party etc" value="<?php echo $gameType; ?>" />
+        
         <input class="submitBtn" name="submit" type="submit" value="Submit" />
     </form>
+
 </body>
 
 </html>
